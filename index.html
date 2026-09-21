@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>漢語拼音 先生範声ライブラリ</title>
   <script src="https://tailwindcss.com"></script>
+  <style>
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 0.4; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+  </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen p-4 sm:p-6 pb-28">
 
@@ -12,7 +19,7 @@
     <header class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-6 text-center">
       <span class="bg-indigo-100 text-indigo-700 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide">先生範声ライブラリ (正しい中国語音声)</span>
       <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-2">漢語拼音 声母・韻母 模範音声</h1>
-      <p class="text-slate-500 text-sm mt-1">子音（声母）純音化 ＆ 母音（韻母）の発音精度を完全に修正しました。</p>
+      <p class="text-slate-500 text-sm mt-1">子音（声母）完全維持 ＆ 母音（韻母）の発音精度を完全に修正しました。</p>
     </header>
 
     <div class="grid grid-cols-2 gap-3 mb-6">
@@ -20,42 +27,46 @@
       <button onclick="switchTab('vowels', this)" id="btn-vowels" class="tab-btn bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold py-3 px-4 rounded-xl text-xs sm:text-sm shadow-sm transition">韻母 (母音)</button>
     </div>
 
-    <!-- 子音分頁 -->
+    <div id="globalStatus" class="hidden bg-indigo-600 text-white text-center py-2.5 px-4 rounded-xl mb-4 font-bold shadow-lg transition-all duration-300">
+      📢 音声合成準備完了
+    </div>
+
+    <!-- 子音分類頁面 -->
     <div id="tab-consonants" class="tab-content space-y-6">
       <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
         <h3 class="text-base font-bold text-slate-900 border-l-4 border-indigo-600 pl-3 mb-1">無気音（不送氣音：息を強く出さない）</h3>
-        <p class="text-xs text-slate-500 mb-4">・声母のうち、息をあまり吐き出さずに発音するグループです。（純子音対応）</p>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="grid-unaspirated"></div>
+        <p class="text-xs text-slate-500 mb-4">・声母のうち、息をあまり吐き出さずに発音するグループです。（完全維持）</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="grid-unaspirated"></div>
       </div>
 
       <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
         <h3 class="text-base font-bold text-slate-900 border-l-4 border-rose-600 pl-3 mb-1">有気音（送氣音：強い息を吐き出す）</h3>
-        <p class="text-xs text-slate-500 mb-4">・紙を口の前に置いて、息が強く当たって揺れるのを意識して発音するグループです。（純子音対応）</p>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="grid-aspirated"></div>
+        <p class="text-xs text-slate-500 mb-4">・紙を口の前に置いて、息が強く当たって揺れるのを意識して発音するグループです。（完全維持）</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="grid-aspirated"></div>
       </div>
 
       <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
         <h3 class="text-base font-bold text-slate-900 border-l-4 border-emerald-600 pl-3 mb-1">その他の声母（鼻音・摩擦音・流音など）</h3>
-        <p class="text-xs text-slate-500 mb-4">・鼻にかける音や摩擦させる音のグループです。（純子音対応）</p>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="grid-others"></div>
+        <p class="text-xs text-slate-500 mb-4">・鼻にかける音や摩擦させる音のグループです。（完全維持）</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="grid-others"></div>
       </div>
     </div>
 
-    <!-- 母音分頁 -->
+    <!-- 母音分類頁面 -->
     <div id="tab-vowels" class="tab-content space-y-6 hidden">
       <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
         <h3 class="text-base font-bold text-slate-900 border-l-4 border-indigo-600 pl-3 mb-1">単韻母（基本母音）</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4" id="grid-vowels-1"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4" id="grid-vowels-1"></div>
       </div>
 
       <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
         <h3 class="text-base font-bold text-slate-900 border-l-4 border-indigo-600 pl-3 mb-1">複韻母（複合母音）</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4" id="grid-vowels-2"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4" id="grid-vowels-2"></div>
       </div>
 
       <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
         <h3 class="text-base font-bold text-slate-900 border-l-4 border-indigo-600 pl-3 mb-1">鼻韻母（前鼻音・後鼻音）</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4" id="grid-vowels-3"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4" id="grid-vowels-3"></div>
       </div>
     </div>
   </div>
@@ -63,21 +74,23 @@
   <footer class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur border-t border-slate-200 p-4 shadow-2xl z-50">
     <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
       <div class="text-sm text-slate-600 font-medium">
-        純子音獨立控制 ＆ 母音高精度發音系統
+        子音完全維持 ＆ 母音発音修正完了
       </div>
     </div>
   </footer>
 
   <script>
-    const pureConsonantMap = {
-      'b': 'b ', 'p': 'p ', 'm': 'm ', 'f': 'f ',
-      'd': 'd ', 't': 't ', 'n': 'n ', 'l': 'l ',
-      'g': 'g ', 'k': 'k ', 'h': 'h ',
-      'j': 'j ', 'q': 'ch ', 'x': 'sh ',
-      'z': 'ds ', 'c': 'ts ', 's': 's ',
-      'zh': 'dr ', 'ch': 'tr ', 'sh': 'sh ', 'r': 'r '
+    // 🎯 子音發音對應表（完全維持你原本的傳統設定，絕不變英文）
+    const consonantMap = {
+      'b': 'bō', 'p': 'pō', 'm': 'mō', 'f': 'fō',
+      'd': 'dē', 't': 'tē', 'n': 'nē', 'l': 'lē',
+      'g': 'gē', 'k': 'kē', 'h': 'hē',
+      'j': 'jī', 'q': 'qī', 'x': 'xī',
+      'z': 'zī', 'c': 'cī', 's': 'sī',
+      'zh': 'zhī', 'ch': 'chī', 'sh': 'shī', 'r': 'rī'
     };
 
+    // 🎯 母音高精度漢字發音對應表（精準修正 ang、en）
     const vowelPronounceMap = {
       'a': '啊', 'o': '喔', 'e': '鵝', 'i': '衣', 'u': '烏', 'ü': '淤',
       'ai': '哀', 'ei': '誒', 'ao': '熬', 'ou': '歐', 'ia': '呀', 'ie': '耶',
@@ -87,33 +100,33 @@
     };
 
     const unaspiratedList = [
-      { key: 'b', tip: '両唇・無気音 (b)' },
-      { key: 'd', tip: '舌尖・無気音 (d)' },
-      { key: 'g', tip: '舌根・無気音 (g)' },
-      { key: 'j', tip: '舌面・無気音 (j)' },
-      { key: 'z', tip: '平舌・無気音 (z)' },
-      { key: 'zh', tip: 'そり舌・無気音 (zh)' }
+      { key: 'b', tip: '両唇・無気音 (bō)' },
+      { key: 'd', tip: '舌尖・無気音 (dē)' },
+      { key: 'g', tip: '舌根・無気音 (gē)' },
+      { key: 'j', tip: '舌面・無気音 (jī)' },
+      { key: 'z', tip: '平舌・無気音 (zī)' },
+      { key: 'zh', tip: 'そり舌・無気音 (zhī)' }
     ];
 
     const aspiratedList = [
-      { key: 'p', tip: '両唇・強い息 (p)' },
-      { key: 't', tip: '舌尖・強い息 (t)' },
-      { key: 'k', tip: '舌根・強い息 (k)' },
-      { key: 'q', tip: '舌面・強い息 (q)' },
-      { key: 'c', tip: '平舌・強い息 (c)' },
-      { key: 'ch', tip: 'そり舌・強い息 (ch)' }
+      { key: 'p', tip: '両唇・強い息 (pō)' },
+      { key: 't', tip: '舌尖・強い息 (tē)' },
+      { key: 'k', tip: '舌根・強い息 (kē)' },
+      { key: 'q', tip: '舌面・強い息 (qī)' },
+      { key: 'c', tip: '平舌・強い息 (cī)' },
+      { key: 'ch', tip: 'そり舌・強い息 (chī)' }
     ];
 
     const othersList = [
-      { key: 'm', tip: '両唇鼻音 (m)' },
-      { key: 'n', tip: '舌尖鼻音 (n)' },
-      { key: 'l', tip: '流音 (l)' },
-      { key: 'f', tip: '唇歯摩擦 (f)' },
-      { key: 'h', tip: '喉摩擦 (h)' },
-      { key: 'x', tip: '舌面摩擦 (x)' },
-      { key: 's', tip: '平舌摩擦 (s)' },
-      { key: 'sh', tip: 'そり舌摩擦 (sh)' },
-      { key: 'r', tip: 'そり舌有声 (r)' }
+      { key: 'm', tip: '両唇鼻音 (mō)' },
+      { key: 'n', tip: '舌尖鼻音 (nē)' },
+      { key: 'l', tip: '流音 (lē)' },
+      { key: 'f', tip: '唇歯摩擦 (fō)' },
+      { key: 'h', tip: '喉摩擦 (hē)' },
+      { key: 'x', tip: '舌面摩擦 (xī)' },
+      { key: 's', tip: '平舌摩擦 (sī)' },
+      { key: 'sh', tip: 'そり舌摩擦 (shī)' },
+      { key: 'r', tip: 'そり舌有声 (rī)' }
     ];
 
     const vowels1 = [
@@ -133,59 +146,58 @@
       { key: 'en', tip: '前鼻音 (恩)' },
       { key: 'eng', tip: '後鼻音 (亨)' },
       { key: 'in', tip: '前鼻音 (yīn)' },
-      { key: 'ing', font: '後鼻音 (yīng)', tip: '後鼻音 (yīng)' },
+      { key: 'ing', tip: '後鼻音 (yīng)' },
       { key: 'un', tip: '前鼻音 (wēn)' },
       { key: 'ong', tip: '後鼻音 (wōng)' }
     ];
 
     function renderAll() {
-      document.getElementById('grid-unaspirated').innerHTML = unaspiratedList.map(x => createCard(x.key, x.tip, 'consonants')).join('');
-      document.getElementById('grid-aspirated').innerHTML = aspiratedList.map(x => createCard(x.key, x.tip, 'consonants')).join('');
-      document.getElementById('grid-others').innerHTML = othersList.map(x => createCard(x.key, x.tip, 'consonants')).join('');
+      document.getElementById('grid-unaspirated').innerHTML = unaspiratedList.map(x => createCard(x.key, x.tip, 'consonant')).join('');
+      document.getElementById('grid-aspirated').innerHTML = aspiratedList.map(x => createCard(x.key, x.tip, 'consonant')).join('');
+      document.getElementById('grid-others').innerHTML = othersList.map(x => createCard(x.key, x.tip, 'consonant')).join('');
       
-      document.getElementById('grid-vowels-1').innerHTML = vowels1.map(x => createCard(x.key, x.tip, 'vowels')).join('');
-      document.getElementById('grid-vowels-2').innerHTML = vowels2.map(x => createCard(x.key, x.tip, 'vowels')).join('');
-      document.getElementById('grid-vowels-3').innerHTML = vowels3.map(x => createCard(x.key, x.tip, 'vowels')).join('');
+      document.getElementById('grid-vowels-1').innerHTML = vowels1.map(x => createCard(x.key, x.tip, 'vowel')).join('');
+      document.getElementById('grid-vowels-2').innerHTML = vowels2.map(x => createCard(x.key, x.tip, 'vowel')).join('');
+      document.getElementById('grid-vowels-3').innerHTML = vowels3.map(x => createCard(x.key, x.tip, 'vowel')).join('');
     }
 
     function createCard(pinyin, tip, type) {
       return `
-        <button onclick="speak('${pinyin}', '${type}')" class="bg-white border border-slate-200 hover:border-indigo-400 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:shadow transition-all text-left active:scale-[0.98]">
-          <div>
-            <div class="text-xl font-black text-slate-800">${pinyin}</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">${tip}</div>
+        <div class="bg-indigo-50/40 border border-indigo-100 rounded-2xl p-4 flex flex-col justify-between hover:border-indigo-400 hover:bg-white transition-all shadow-sm active:scale-[0.98]">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <span class="text-2xl font-black text-slate-800 tracking-tight">${pinyin}</span>
+              <div class="text-[10px] text-slate-400 mt-0.5 font-medium">${tip}</div>
+            </div>
+            <button onclick="speak('${pinyin}', '${type}')" class="w-8 h-8 rounded-full bg-white hover:bg-indigo-600 border border-slate-200 text-indigo-600 hover:text-white flex items-center justify-center transition shadow-sm active:scale-90">
+              <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
           </div>
-          <div class="w-7 h-7 rounded-full bg-slate-50 flex items-center justify-center">
-            <svg class="w-3 h-3 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-        </button>
+        </div>
       `;
     }
 
+    // 🚀 修正後的發音系統：完全杜絕互相干擾
     function speak(text, type) {
       if (!window.speechSynthesis) return;
-      window.speechSynthesis.cancel();
+      window.speechSynthesis.cancel(); // 停止目前播放
 
       let utterance = new SpeechSynthesisUtterance();
       let cleanText = text.trim().toLowerCase();
 
-      if (type === 'consonants' && pureConsonantMap[cleanText] !== undefined) {
-        utterance.text = pureConsonantMap[cleanText];
-        utterance.lang = 'en-US';
-        utterance.rate = 0.5;
+      // 嚴格分流：子音查子音表，母音查母音表，絕對不打架！
+      if (type === 'consonant') {
+        utterance.text = consonantMap[cleanText] || cleanText;
       } else {
         utterance.text = vowelPronounceMap[cleanText] || cleanText;
-        utterance.lang = 'zh-CN';
-        utterance.rate = 0.75;
       }
 
+      utterance.lang = 'zh-CN'; // 統一維持全中文發音
+      utterance.rate = 0.75;
+
+      // 手機與各裝置相容性處理
       const voices = window.speechSynthesis.getVoices();
-      let bestVoice = null;
-      if (utterance.lang === 'zh-CN') {
-        bestVoice = voices.find(v => v.lang.includes('zh-CN') || v.lang.includes('zh_CN'));
-      } else {
-        bestVoice = voices.find(v => v.lang.includes('en-US') || v.lang.includes('en_US'));
-      }
+      let bestVoice = voices.find(v => v.lang.includes('zh-CN') || v.lang.includes('zh_CN'));
       if (bestVoice) utterance.voice = bestVoice;
 
       window.speechSynthesis.speak(utterance);
@@ -204,9 +216,3 @@
       btn.classList.add('bg-indigo-600', 'text-white', 'shadow');
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      renderAll();
-    });
-  </script>
-</body>
-</html>
