@@ -16,7 +16,6 @@
     .btn-active { background: #4f46e5; color: white; border-color: #4f46e5; }
     .btn-inactive { background: white; color: #334155; }
     .btn-inactive:hover { background: #f1f5f9; }
-    .status-msg { background: #4f46e5; color: white; text-align: center; padding: 10px; border-radius: 12px; margin-bottom: 16px; font-weight: bold; }
     .hidden { display: none !important; }
     .section-card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 24px; }
     h3 { font-size: 16px; font-weight: bold; color: #0f172a; margin: 0 0 4px 0; padding-left: 10px; }
@@ -24,15 +23,15 @@
     .border-rose { border-left: 4px solid #e11d48; }
     .border-emerald { border-left: 4px solid #10b981; }
     .section-desc { font-size: 12px; color: #64748b; margin: 0 0 16px 0; }
-    .grid-container { display: grid; grid-template-cols: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .grid-container { display: grid; grid-template-cols: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
     .pinyin-card { background: rgba(238, 242, 255, 0.4); border: 1px solid #e0e7ff; border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
     .pinyin-card:hover { border-color: #818cf8; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
     .pinyin-text { font-size: 24px; font-weight: 900; color: #1e293b; }
     .pinyin-tip { font-size: 10px; color: #94a3b8; margin-top: 2px; font-weight: 500; }
-    .play-btn { w-size: 32px; width: 32px; height: 32px; border-radius: 55%; background: white; border: 1px solid #e2e8f0; color: #4f46e5; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s; }
+    .play-btn { width: 32px; height: 32px; border-radius: 50%; background: white; border: 1px solid #e2e8f0; color: #4f46e5; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s; padding: 0; }
     .play-btn:hover { background: #4f46e5; color: white; border-color: #4f46e5; }
     .play-btn svg { width: 14px; height: 14px; fill: currentColor; }
-    footer { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); border-t: 1px solid #e2e8f0; padding: 16px; text-align: center; box-shadow: 0 -4px 12px rgba(0,0,0,0.05); font-size: 14px; font-weight: 500; color: #475569; }
+    footer { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); border-top: 1px solid #e2e8f0; padding: 16px; text-align: center; box-shadow: 0 -4px 12px rgba(0,0,0,0.05); font-size: 14px; font-weight: 500; color: #475569; z-index: 100; }
   </style>
 </head>
 <body>
@@ -49,26 +48,48 @@
       <button onclick="switchTab('vowels', this)" id="btn-vowels" class="tab-btn btn-inactive">韻母 (母音)</button>
     </div>
 
-    <div id="globalStatus" class="status-msg hidden">📢 音声合成準備完了</div>
-
     <!-- 子音分頁 -->
     <div id="tab-consonants" class="tab-content">
       <div class="section-card">
         <h3 class="border-indigo">無気音（不送氣音：息を強く出さない）</h3>
         <p class="section-desc">・声母のうち、息をあまり吐き出さずに発音するグループです。（完全維持）</p>
-        <div class="grid-container" id="grid-unaspirated"></div>
+        <div class="grid-container">
+          <div class="pinyin-card"><div class="pinyin-text">b<div class="pinyin-tip">両唇・無気音 (bō)</div></div><button onclick="speak('b', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">d<div class="pinyin-tip">舌尖・無気音 (dē)</div></div><button onclick="speak('d', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">g<div class="pinyin-tip">舌根・無気音 (gē)</div></div><button onclick="speak('g', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">j<div class="pinyin-tip">舌面・無気音 (jī)</div></div><button onclick="speak('j', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">z<div class="pinyin-tip">平舌・無気音 (zī)</div></div><button onclick="speak('z', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">zh<div class="pinyin-tip">そり舌・無気音 (zhī)</div></div><button onclick="speak('zh', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+        </div>
       </div>
 
       <div class="section-card">
         <h3 class="border-rose">有気音（送氣音：強い息を吐き出す）</h3>
         <p class="section-desc">・紙を口の前に置いて、息が強く当たって揺れるのを意識して発音するグループです。（完全維持）</p>
-        <div class="grid-container" id="grid-aspirated"></div>
+        <div class="grid-container">
+          <div class="pinyin-card"><div class="pinyin-text">p<div class="pinyin-tip">両唇・強い息 (pō)</div></div><button onclick="speak('p', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">t<div class="pinyin-tip">舌尖・強い息 (tē)</div></div><button onclick="speak('t', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">k<div class="pinyin-tip">舌根・強い息 (kē)</div></div><button onclick="speak('k', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">q<div class="pinyin-tip">舌面・強い息 (qī)</div></div><button onclick="speak('q', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">c<div class="pinyin-tip">平舌・強い息 (cī)</div></div><button onclick="speak('c', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">ch<div class="pinyin-tip">そり舌・強い息 (chī)</div></div><button onclick="speak('ch', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+        </div>
       </div>
 
       <div class="section-card">
         <h3 class="border-emerald">その他の声母（鼻音・摩擦音・流音など）</h3>
         <p class="section-desc">・鼻にかける音や摩擦させる音のグループです。（完全維持）</p>
-        <div class="grid-container" id="grid-others"></div>
+        <div class="grid-container">
+          <div class="pinyin-card"><div class="pinyin-text">m<div class="pinyin-tip">両唇鼻音 (mō)</div></div><button onclick="speak('m', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">n<div class="pinyin-tip">舌尖鼻音 (nē)</div></div><button onclick="speak('n', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">l<div class="pinyin-tip">流音 (lē)</div></div><button onclick="speak('l', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">f<div class="pinyin-tip">唇歯摩擦 (fō)</div></div><button onclick="speak('f', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">h<div class="pinyin-tip">喉摩擦 (hē)</div></div><button onclick="speak('h', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">x<div class="pinyin-tip">舌面摩擦 (xī)</div></div><button onclick="speak('x', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">s<div class="pinyin-tip">平舌摩擦 (sī)</div></div><button onclick="speak('s', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">sh<div class="pinyin-tip">そり舌摩擦 (shī)</div></div><button onclick="speak('sh', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+          <div class="pinyin-card"><div class="pinyin-text">r<div class="pinyin-tip">そり舌有声 (rī)</div></div><button onclick="speak('r', 'consonant')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
+        </div>
       </div>
     </div>
 
@@ -77,129 +98,5 @@
       <div class="section-card">
         <h3 class="border-indigo">単韻母（基本母音）</h3>
         <p class="section-desc"></p>
-        <div class="grid-container" id="grid-vowels-1"></div>
-      </div>
-
-      <div class="section-card">
-        <h3 class="border-indigo">複韻母（複合母音）</h3>
-        <p class="section-desc"></p>
-        <div class="grid-container" id="grid-vowels-2"></div>
-      </div>
-
-      <div class="section-card">
-        <h3 class="border-indigo">鼻韻母（前鼻音・後鼻音）</h3>
-        <p class="section-desc"></p>
-        <div class="grid-container" id="grid-vowels-3"></div>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    子音完全維持 ＆ 母音発音修正完了 (正統中国語音声)
-  </footer>
-
-  <script>
-    // 🎯 完全維持原本的中文發音規則，絕對沒有英文發音
-    const consonantMap = {
-      'b': 'bō', 'p': 'pō', 'm': 'mō', 'f': 'fō',
-      'd': 'dē', 't': 'tē', 'n': 'nē', 'l': 'lē',
-      'g': 'gē', 'k': 'kē', 'h': 'hē',
-      'j': 'jī', 'q': 'qī', 'x': 'xī',
-      'z': 'zī', 'c': 'cī', 's': 'sī',
-      'zh': 'zhī', 'ch': 'chī', 'sh': 'shī', 'r': 'rī'
-    };
-
-    const vowelPronounceMap = {
-      'a': '啊', 'o': '喔', 'e': '鵝', 'i': '衣', 'u': '烏', 'ü': '淤',
-      'ai': '哀', 'ei': '誒', 'ao': '熬', 'ou': '歐', 'ia': '呀', 'ie': '耶',
-      'ua': '娃', 'uo': '窩', 'üe': '約', 'iao': '腰', 'iu': '優', 'uai': '歪',
-      'ui': '威', 'er': '兒', 'an': '安', 'ang': '骯', 'en': '恩', 'eng': '亨',
-      'in': '因', 'ing': '英', 'un': '溫', 'ong': '翁'
-    };
-
-    const unaspiratedList = [
-      { key: 'b', tip: '両唇・無気音 (bō)' }, { key: 'd', tip: '舌尖・無気音 (dē)' },
-      { key: 'g', tip: '舌根・無気音 (gē)' }, { key: 'j', tip: '舌面・無気音 (jī)' },
-      { key: 'z', tip: '平舌・無気音 (zī)' }, { key: 'zh', tip: 'そり舌・無気音 (zhī)' }
-    ];
-
-    const aspiratedList = [
-      { key: 'p', tip: '両唇・強い息 (pō)' }, { key: 't', tip: '舌尖・強い息 (tē)' },
-      { key: 'k', tip: '舌根・強い息 (kē)' }, { key: 'q', tip: '舌面・強い息 (qī)' },
-      { key: 'c', tip: '平舌・強い息 (cī)' }, { key: 'ch', tip: 'そり舌・強い息 (chī)' }
-    ];
-
-    const othersList = [
-      { key: 'm', tip: '両唇鼻音 (mō)' }, { key: 'n', tip: '舌尖鼻音 (nē)' },
-      { key: 'l', tip: '流音 (lē)' }, { key: 'f', tip: '唇歯摩擦 (fō)' },
-      { key: 'h', tip: '喉摩擦 (hē)' }, { key: 'x', tip: '舌面摩擦 (xī)' },
-      { key: 's', tip: '平舌摩擦 (sī)' }, { key: 'sh', tip: 'そり舌摩擦 (shī)' },
-      { key: 'r', tip: 'そり舌有声 (rī)' }
-    ];
-
-    const vowels1 = [
-      { key: 'a', tip: '大きく開口 (ā)' }, { key: 'o', tip: '唇を丸く (ō)' },
-      { key: 'e', tip: '喉の奥から (ē)' }, { key: 'i', tip: '横に引く (yī)' },
-      { key: 'u', tip: '強く突き出す (wū)' }, { key: 'ü', tip: 'ü音' }
-    ];
-
-    const vowels2 = ['ai', 'ei', 'ao', 'ou', 'ia', 'ie', 'ua', 'uo', 'üe', 'iao', 'iu', 'uai', 'ui', 'er'].map(k => ({ key: k, tip: '複韻母' }));
-    
-    const vowels3 = [
-      { key: 'an', tip: '前鼻音 (安)' }, { key: 'ang', tip: '後鼻音 (骯)' },
-      { key: 'en', tip: '前鼻音 (恩)' }, { key: 'eng', tip: '後鼻音 (亨)' },
-      { key: 'in', tip: '前鼻音 (yīn)' }, { key: 'ing', tip: '後鼻音 (yīng)' },
-      { key: 'un', tip: '前鼻音 (wēn)' }, { key: 'ong', tip: '後鼻音 (wōng)' }
-    ];
-
-    function renderAll() {
-      document.getElementById('grid-unaspirated').innerHTML = unaspiratedList.map(x => createCard(x.key, x.tip, 'consonant')).join('');
-      document.getElementById('grid-aspirated').innerHTML = aspiratedList.map(x => createCard(x.key, x.tip, 'consonant')).join('');
-      document.getElementById('grid-others').innerHTML = othersList.map(x => createCard(x.key, x.tip, 'consonant')).join('');
-      document.getElementById('grid-vowels-1').innerHTML = vowels1.map(x => createCard(x.key, x.tip, 'vowel')).join('');
-      document.getElementById('grid-vowels-2').innerHTML = vowels2.map(x => createCard(x.key, x.tip, 'vowel')).join('');
-      document.getElementById('grid-vowels-3').innerHTML = vowels3.map(x => createCard(x.key, x.tip, 'vowel')).join('');
-    }
-
-    function createCard(pinyin, tip, type) {
-      return `
-        <div class="pinyin-card">
-          <div>
-            <span class="pinyin-text">${pinyin}</span>
-            <div class="pinyin-tip">${tip}</div>
-          </div>
-          <button onclick="speak('${pinyin}', '${type}')" class="play-btn">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </button>
-        </div>
-      `;
-    }
-
-    function speak(text, type) {
-      if (!window.speechSynthesis) return;
-      window.speechSynthesis.cancel();
-
-      let utterance = new SpeechSynthesisUtterance();
-      let cleanText = text.trim().toLowerCase();
-
-      // 精準分流，保證完全是正確的中文普通話發音
-      if (type === 'consonant') {
-        utterance.text = consonantMap[cleanText] || cleanText;
-      } else {
-        utterance.text = vowelPronounceMap[cleanText] || cleanText;
-      }
-
-      utterance.lang = 'zh-CN'; 
-      utterance.rate = 0.75;
-
-      const voices = window.speechSynthesis.getVoices();
-      let bestVoice = voices.find(v => v.lang.includes('zh-CN') || v.lang.includes('zh_CN'));
-      if (bestVoice) utterance.voice = bestVoice;
-
-      window.speechSynthesis.speak(utterance);
-    }
-
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById('tab-' + tabId).classList.remove('hidden');
-      
+        <div class="grid-container">
+          <div class="pinyin-card"><div class="pinyin-text">a<div class="pinyin-tip">大きく開口 (ā)</div></div><button onclick="speak('a', 'vowel')" class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>
