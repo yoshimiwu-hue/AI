@@ -47,7 +47,7 @@
 
     <!-- 音声ステータスバー -->
     <div id="voiceStatus" class="bg-indigo-50 text-indigo-700 border border-indigo-200 text-center py-2 px-4 rounded-xl mb-4 text-xs font-semibold">
-      中国語音声エンジンを読み込み中...
+      中国語音声合成エンジン（準備完了）
     </div>
 
     <!-- タブ 1：声母 (子音) -->
@@ -68,7 +68,7 @@
       </div>
     </div>
 
-    <!-- タブ 2：韻母 (母音 - en, eng 削除済み) -->
+    <!-- タブ 2：韻母 (母音) -->
     <div id="tab-vowels" class="tab-content space-y-6 hidden">
       <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
         <h3 class="text-base font-bold text-slate-900 border-l-4 border-indigo-600 pl-3 mb-1">単韻母（基本母音）</h3>
@@ -199,7 +199,7 @@
   <script>
     const consonantData = {
       'b':  { sound: 'bō', tip: '両唇・無気音' },
-      'd':  { sound: 'dē', tip: '舌尖・無気音' }, // 正確な第1声 dē (ピンイン直接合成)
+      'd':  { sound: 'dē', tip: '舌尖・無気音' },
       'g':  { sound: 'gē', tip: '舌根・無気音' },
       'j':  { sound: 'jī', tip: '舌面・無気音' },
       'z':  { sound: 'zī', tip: '平舌・無気音' },
@@ -223,7 +223,6 @@
       'r':  { sound: 'rī', tip: 'そり舌有声' }
     };
 
-    // 韻母データ（en, eng 削除済み）
     const vowelData = {
       'a':   { sound: 'ā', tip: '単韻母' },
       'o':   { sound: 'ō', tip: '単韻母' },
@@ -260,37 +259,7 @@
     const otherKeys = ['m', 'n', 'l', 'f', 'h', 'x', 's', 'sh', 'r'];
     const vowels1Keys = ['a', 'o', 'e', 'i', 'u', 'ü'];
     const vowels2Keys = ['ai', 'ei', 'ao', 'ou', 'ia', 'ie', 'ua', 'uo', 'üe', 'iao', 'iu', 'uai', 'ui', 'er'];
-    // 鼻韻母（en, eng 削除済み）
     const vowels3Keys = ['an', 'ang', 'in', 'ing', 'un', 'ong'];
-
-    let pinyinVoice = null;
-
-    function initVoices() {
-      if (!('speechSynthesis' in window)) {
-        document.getElementById('voiceStatus').innerText = '⚠️ お使いの端末は音声合成に対応していません';
-        return;
-      }
-
-      const voices = window.speechSynthesis.getVoices();
-      if (!voices.length) return;
-
-      // 中国語普通話の音声エンジンを厳格に指定
-      pinyinVoice = 
-        voices.find(v => (v.lang === 'zh-CN' || v.lang === 'zh_CN') && (v.name.includes('Xiaoxiao') || v.name.includes('Yunxi') || v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Tingting') || v.name.includes('Mandarin'))) ||
-        voices.find(v => v.lang === 'zh-CN' || v.lang === 'zh_CN') ||
-        voices.find(v => v.lang.startsWith('zh'));
-
-      const statusEl = document.getElementById('voiceStatus');
-      if (pinyinVoice) {
-        statusEl.innerText = `✅ 中国語標準音声エンジン準備完了：${pinyinVoice.name}`;
-      } else {
-        statusEl.innerText = '✅ 中国語音声モード設定完了';
-      }
-    }
-
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = initVoices;
-    }
 
     function renderAll() {
       document.getElementById('grid-unaspirated').innerHTML = unaspiratedKeys.map(k => createCard(k, consonantData[k])).join('');
@@ -323,25 +292,23 @@
       `;
     }
 
-    function speakPinyin(soundText) {
+    // ★ 您所指定的發音標準核心 ★
+    function speakPinyin(text) {
       if (!('speechSynthesis' in window)) return;
 
+      // 每次發音前先重置，防止手機端（Safari / Chrome）鎖定卡死
       window.speechSynthesis.cancel();
 
-      let targetText = soundText;
-      if (soundText === 'dē') {
-        targetText = 'dē'; // 直接送入標準調號拼音，輸出標準第1聲 [tɤ̄]
-      } else if (soundText === 'āng') {
-        targetText = '骯';
-      }
+      // ang 稍微鎖定第一聲後鼻音
+      const speakText = (text === 'āng') ? '骯' : text;
 
-      const utterance = new SpeechSynthesisUtterance(targetText);
-      utterance.lang = 'zh-CN';
-      if (pinyinVoice) utterance.voice = pinyinVoice;
+      const utterance = new SpeechSynthesisUtterance(speakText);
 
+      // 強制指定語言（拼音教學建議 zh-CN；如欲偏好台灣國語可替換為 zh-TW）
+      utterance.lang = "zh-CN"; 
+      
       utterance.rate = 0.82;
       utterance.pitch = 1.0;
-      utterance.volume = 1.0;
 
       if (window.speechSynthesis.paused) {
         window.speechSynthesis.resume();
@@ -546,7 +513,6 @@ ${wrongSummary}
 
     window.addEventListener('DOMContentLoaded', () => {
       renderAll();
-      initVoices();
       checkInAppBrowser();
     });
   </script>
